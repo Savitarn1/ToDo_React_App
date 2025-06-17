@@ -59,7 +59,7 @@ const ToDo = ({ data , index}: TaskData) => {
         <Input onSubmit={handleAddTask} place='New task' />
       </div>
       <div className='flex justify-between items-center mt-2'>
-        <div className='flex flex-col'>
+        <div className='flex max-sm:flex-col'>
           {index !== 0 && <button className='max-sm:rotate-90' onClick={() => toPrevious(data.id)}>⬅️</button>}
           <button className='max-sm:rotate-90' onClick={() => toNext(data.id)}>➡️</button>
         </div>

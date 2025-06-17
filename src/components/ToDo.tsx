@@ -9,7 +9,7 @@ interface TaskData {
 }
 
 const ToDo = ({ data , index}: TaskData) => {
-  const { removeColumn, addTask, todos , toNext , toPrevious , changeTitle} = useTaskStore();
+  const { removeColumn, addTask, todos , toNext , toPrevious , changeTitle, columns} = useTaskStore();
 
   const [filtered, setFiltered] = useState<Todo[]>([]);
   const [inputVisible, setInputVisible] = useState(false);
@@ -61,7 +61,7 @@ const ToDo = ({ data , index}: TaskData) => {
       <div className='flex justify-between items-center mt-2'>
         <div className='flex max-sm:flex-col'>
           {index !== 0 && <button className='max-sm:rotate-90' onClick={() => toPrevious(data.id)}>⬅️</button>}
-          <button className='max-sm:rotate-90' onClick={() => toNext(data.id)}>➡️</button>
+          {index !== columns.length -1 && <button className='max-sm:rotate-90' onClick={() => toNext(data.id)}>➡️</button>}
         </div>
         {data.title && removeColumn && (
           <button onClick={() => removeColumn(data.title)}>🗑️</button>

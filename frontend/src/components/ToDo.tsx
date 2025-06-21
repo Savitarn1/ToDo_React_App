@@ -14,19 +14,19 @@ const ToDo = ({ data , index}: TaskData) => {
   const [filtered, setFiltered] = useState<Todo[]>([]);
   const [inputVisible, setInputVisible] = useState(false);
 
-  const filteredTodos = todos.filter((todo) => todo.parentId === data.id);
+  const filteredTodos = todos.filter((todo) => todo.parentId === data._id);
   const sortedTodos = filteredTodos.sort((a, b) => a.order - b.order);
   useEffect(() => {
     setFiltered(sortedTodos);
-  }, [todos, data.id]);
+  }, [todos]);
   
   const handleAddTask = (title: string) => {
-    addTask(data.id, title,filtered.length);
+    addTask(data._id, title,filtered.length);
   };
 
 
   return (
-    <div className={'bg-[#f7f9fa] p-2 rounded-md flex flex-col '}>
+    <div className={'bg-[#f7f9fa] p-2 rounded-md flex flex-col'}>
       <div className='flex flex-col flex-grow'>
         <div className='flex justify-between items-center font-semibold text-lg text-slate-500'>
           
@@ -40,7 +40,7 @@ const ToDo = ({ data , index}: TaskData) => {
                 setInputVisible(false);
               }
               }}
-              onChange={(evt) => changeTitle(data.id , evt.target.value)}
+              onChange={(evt) => changeTitle(data._id , evt.target.value)}
               className='grow-1 test'
               defaultValue={data.title}
             />
@@ -52,7 +52,7 @@ const ToDo = ({ data , index}: TaskData) => {
           <p>{filtered.length}</p>
         </div>
         {filtered.map((task) => (
-          <Section maxValue={sortedTodos.length} parentId={task.parentId} childId={task.id} key={task.id}>
+          <Section maxValue={sortedTodos.length} parentId={task.parentId} childId={task._id} key={task._id}>
             {task.title}
           </Section>
         ))}
@@ -60,8 +60,8 @@ const ToDo = ({ data , index}: TaskData) => {
       </div>
       <div className='flex justify-between items-center mt-2'>
         <div className='flex max-sm:flex-col'>
-          {index !== 0 && <button className='max-sm:rotate-90' onClick={() => toPrevious(data.id)}>⬅️</button>}
-          {index !== columns.length -1 && <button className='max-sm:rotate-90' onClick={() => toNext(data.id)}>➡️</button>}
+          {index !== 0 && <button className='max-sm:rotate-90' onClick={() => toPrevious(data._id)}>⬅️</button>}
+          {index !== columns.length -1 && <button className='max-sm:rotate-90' onClick={() => toNext(data._id)}>➡️</button>}
         </div>
         {data.title && removeColumn && (
           <button onClick={() => removeColumn(data.title)}>🗑️</button>

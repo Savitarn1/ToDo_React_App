@@ -15,11 +15,11 @@ const FullToDo = () => {
   };
 
   const handleUpdate = () => {
-    const oldValue = todos.find(todo => todo.parentId === selectedTodo.parentId && todo.order === selectedTodo.order && todo.id !== selectedTodo.id);
+    const oldValue = todos.find(todo => todo.parentId === selectedTodo.parentId && todo.order === selectedTodo.order && todo._id !== selectedTodo._id);
     if (oldValue) {
-      updateTask(oldValue.parentId, oldValue.id, { ...oldValue, order: originalTodo.order });
+      updateTask(oldValue.parentId, oldValue._id, { ...oldValue, order: originalTodo.order });
     }
-    updateTask(selectedTodo.parentId, selectedTodo.id, selectedTodo);
+    updateTask(selectedTodo.parentId, selectedTodo._id, selectedTodo);
     setViewTodo(false);
   };
   return (
@@ -75,16 +75,16 @@ const FullToDo = () => {
               );
             }}
           >
-            <option defaultValue={selectedTodo.id}>
+            <option defaultValue={selectedTodo._id}>
               {
-                columns.find((column) => column.id === selectedTodo.parentId)
+                columns.find((column) => column._id === selectedTodo.parentId)
                   ?.title
               }
             </option>
             {columns.map(
               (column) =>
-                column.id !== selectedTodo.parentId && (
-                  <option key={column.id} value={column.id}>
+                column._id !== selectedTodo.parentId && (
+                  <option key={column._id} value={column._id}>
                     {column.title}
                   </option>
                 )
@@ -107,7 +107,7 @@ const FullToDo = () => {
           <button
             className='bg-red-500 py-2 px-3 text-white font-semibold rounded-lg'
             onClick={() => {
-              deleteTask(selectedTodo.parentId, selectedTodo.id),
+              deleteTask(selectedTodo.parentId, selectedTodo._id),
                 setViewTodo(false);
             }}
           >

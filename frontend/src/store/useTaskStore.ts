@@ -1,11 +1,11 @@
 import { create } from 'zustand';
 
 export interface Column {
-  id: number;
+  _id: number;
   title: string;
 }
 export interface Todo {
-  id: number;
+  _id: number;
   parentId: number;
   title: string;
   description?: string;
@@ -33,78 +33,25 @@ interface TaskStoreProps {
 const generateId = () => Date.now() + Math.floor(Math.random() * 10000);
 
 export const useTaskStore = create<TaskStoreProps>((set) => ({
-  columns: [
-    { id: 123, title: 'ToDo' },
-    { id: 456, title: 'In Progress' },
-    { id: 789, title: 'Done' },
-  ],
-  todos: [
-    {
-      id: 101,
-      parentId: 123,
-      title: 'Task 1',
-      description: 'Description for Task 1',
-      order: 1,
-    },
-    {
-      id: 102,
-      parentId: 123,
-      title: 'Task 2',
-      description: 'Description for Task 2',
-      order: 2,
-    },
-    {
-      id: 103,
-      parentId: 123,
-      title: 'Task 3',
-      description: 'Description for Task 3',
-      order: 3,
-    },
-    {
-      id: 201,
-      parentId: 456,
-      title: 'Task 4',
-      description: 'Description for Task 4',
-      order: 1,
-    },
-    {
-      id: 202,
-      parentId: 456,
-      title: 'Task 5',
-      description: 'Description for Task 5',
-      order: 2,
-    },
-    {
-      id: 301,
-      parentId: 789,
-      title: 'Task 6',
-      description: 'Description for Task 6',
-      order: 1,
-    },
-  ],
+  columns: [],
+  todos: [],
   viewTodo: false,
   maxValue: 0,
-  selectedTodo: {
-      id: 101,
-      parentId: 123,
-      title: 'Task 1',
-      description: 'Description for Task 1',
-      order: 1,
-    },
+  selectedTodo: { _id: 0, parentId: 0, title: '', description: '', order: 0 },
   addColumn: (title: string) => {
     set((state) => ({
       columns: [
         ...state.columns,
-        { id: generateId(), title },
+        { _id: generateId(), title },
       ],
     }));
   },
   setSelectedTodo: (parentId, childId, maxValue) =>
     set((state) => {
-      const todo = state.todos.find((item) => item.parentId === parentId && item.id === childId);
+      const todo = state.todos.find((item) => item.parentId === parentId && item._id === childId);
       return {
         selectedTodo: todo || {
-          id: childId,
+          _id: childId,
           parentId,
           title: '',
           description: '',
@@ -120,17 +67,17 @@ export const useTaskStore = create<TaskStoreProps>((set) => ({
       if (!column) return {};
       return {
         columns: state.columns.filter((col) => col.title !== title),
-        todos: state.todos.filter((todo) => todo.parentId !== column.id),
+        todos: state.todos.filter((todo) => todo.parentId !== column._id),
       };
     }),
   addTask: (parentId, title,order) => {
     set((state) => {
-      const maxId = state.todos.length ? Math.max(...state.todos.map(t => t.id)) : 100;
+      const maxId = state.todos.length ? Math.max(...state.todos.map(t => t._id)) : 100;
       return {
         todos: [
           ...state.todos,
           {
-            id: maxId + 1,
+            _id: maxId + 1,
             parentId,
             title,
             description: '',
@@ -142,12 +89,12 @@ export const useTaskStore = create<TaskStoreProps>((set) => ({
   },
   deleteTask: (parentId: number, childId: number) =>
     set((state) => ({
-      todos: state.todos.filter((todo) => !(todo.parentId === parentId && todo.id === childId)),
+      todos: state.todos.filter((todo) => !(todo.parentId === parentId && todo._id === childId)),
     })),
   updateTask: (parentId: number, childId: number, updatedTask: Partial<Todo>) =>
     set((state) => ({
       todos: state.todos.map((todo) =>
-        todo.parentId === parentId && todo.id === childId
+        todo.parentId === parentId && todo._id === childId
           ? { ...todo, ...updatedTask }
           : todo
       )
@@ -155,7 +102,7 @@ export const useTaskStore = create<TaskStoreProps>((set) => ({
   toNext: (id: Number) =>
     set((state) => {
       const columns = [...state.columns];
-      const index = columns.findIndex((cl) => cl.id === id);
+      const index = columns.findIndex((cl) => cl._id === id);
       if (index !== -1 && index < columns.length - 1) {
         const [item] = columns.splice(index, 1);
         columns.splice(index + 1, 0, item);
@@ -165,7 +112,7 @@ export const useTaskStore = create<TaskStoreProps>((set) => ({
   toPrevious: (id: Number) =>
     set((state) => {
       const columns = [...state.columns];
-      const index = columns.findIndex((cl) => cl.id === id);
+      const index = columns.findIndex((cl) => cl._id === id);
       if (index > 0) {
         const [item] = columns.splice(index, 1);
         columns.splice(index - 1, 0, item);
@@ -174,7 +121,7 @@ export const useTaskStore = create<TaskStoreProps>((set) => ({
     }),
   changeTitle: (id, title) => set((state) => ({
     columns: state.columns.map(col =>
-      col.id === id ? { ...col, title } : col
+      col._id === id ? { ...col, title } : col
     ),
   }))
 }));

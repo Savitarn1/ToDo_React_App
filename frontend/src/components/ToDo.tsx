@@ -13,17 +13,16 @@ const ToDo = ({ data , index}: TaskData) => {
 
   const [filtered, setFiltered] = useState<Todo[]>([]);
   const [inputVisible, setInputVisible] = useState(false);
+  const [title, setTitle] = useState('');
+  const sortedTodos = todos.filter((todo) => todo.parentId === data._id).sort((a, b) => a.order - b.order);
 
-  const filteredTodos = todos.filter((todo) => todo.parentId === data._id);
-  const sortedTodos = filteredTodos.sort((a, b) => a.order - b.order);
-  useEffect(() => {
-    setFiltered(sortedTodos);
-  }, [todos]);
-  
   const handleAddTask = (title: string) => {
     addTask(data._id, title,filtered.length);
   };
-
+  
+  useEffect(() => {
+    setFiltered(sortedTodos);
+  }, [todos]);
 
   return (
     <div className={'bg-[#f7f9fa] p-2 rounded-md flex flex-col'}>
@@ -34,13 +33,13 @@ const ToDo = ({ data , index}: TaskData) => {
             <input
               type="text"
               autoFocus
-              onBlur={() => setInputVisible(false)}
               onKeyDown={(e) => {
               if (e.key === "Enter") {
                 setInputVisible(false);
+                changeTitle(data._id , title);
               }
               }}
-              onChange={(evt) => changeTitle(data._id , evt.target.value)}
+              onChange={(evt) => setTitle(evt.target.value)}
               className='grow-1 test'
               defaultValue={data.title}
             />
@@ -64,7 +63,7 @@ const ToDo = ({ data , index}: TaskData) => {
           {index !== columns.length -1 && <button className='max-sm:rotate-90' onClick={() => toNext(data._id)}>➡️</button>}
         </div>
         {data.title && removeColumn && (
-          <button onClick={() => removeColumn(data.title)}>🗑️</button>
+          <button onClick={() => removeColumn(data._id)}>🗑️</button>
         )}
       </div>
     </div>

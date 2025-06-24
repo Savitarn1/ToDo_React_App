@@ -1,10 +1,12 @@
-import mongoose from "mongoose";
+import { model, Schema } from 'mongoose';
 
-const todoSchema = new mongoose.Schema({
-  parentId: { type: String , required: true},
-  title: { type: String, required: true},
-  description: { type: String},
-  order: { type: Number, required: true},
-},{timestamps:true})
+const todoSchema = new Schema(
+  {
+    parentId: { type: String, required: true },
+    title: { type: String, required: true },
+    description: { type: String },
+  },
+  { timestamps: true }
+);
 
-export default mongoose.model('ToDo', todoSchema);
+export default new model('ToDo', todoSchema);

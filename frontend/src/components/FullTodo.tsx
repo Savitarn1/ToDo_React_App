@@ -1,25 +1,18 @@
 import { useTaskStore } from '../store/useTaskStore';
 
 const FullToDo = () => {
-  const { columns, setViewTodo, selectedTodo, deleteTask, updateTask , maxValue , todos} =
-    useTaskStore();
-  const originalTodo = { ...selectedTodo };
+  const { columns, setViewTodo, selectedTodo , maxValue , todos, updateTask} = useTaskStore();
+
   const selectTarget = (evt: React.MouseEvent<HTMLElement>) => {
     const target = evt.target as HTMLElement;
-    if (
-      !target.classList.contains('form') &&
-      target.classList.contains('parent')
-    ) {
+    if (!target.classList.contains('form') && target.classList.contains('parent'))
       setViewTodo(false);
-    }
   };
 
   const handleUpdate = () => {
-    const oldValue = todos.find(todo => todo.parentId === selectedTodo.parentId && todo.order === selectedTodo.order && todo._id !== selectedTodo._id);
-    if (oldValue) {
-      updateTask(oldValue.parentId, oldValue._id, { ...oldValue, order: originalTodo.order });
-    }
-    updateTask(selectedTodo.parentId, selectedTodo._id, selectedTodo);
+    const originalData = todos.find((todo) => todo._id === selectedTodo._id);
+    if (originalData)
+      updateTask(selectedTodo.parentId, selectedTodo._id, selectedTodo, originalData);
     setViewTodo(false);
   };
   return (
@@ -27,7 +20,8 @@ const FullToDo = () => {
       onClick={(evt) => selectTarget(evt)}
       className='parent fixed top-0 flex w-full h-screen bg-black/30 justify-center items-center'
     >
-      <div className='form w-md bg-white m-auto p-4 rounded-lg'>
+      <div className=' p-20'>
+        <div className='form w-md bg-white m-auto p-4 rounded-lg'>
         <label htmlFor='title' className='text-[17px] font-semibold '>
           Title
         </label>
@@ -51,7 +45,7 @@ const FullToDo = () => {
           id='description'
           placeholder='Description'
           className='border border-gray-300 rounded-md p-2 w-full outline-orange-500 my-2'
-          defaultValue={selectedTodo.description}
+          defaultValue={selectedTodo?.description || ''}
           onChange={() =>
             (selectedTodo.description = (
               document.getElementById('description') as HTMLTextAreaElement
@@ -70,9 +64,8 @@ const FullToDo = () => {
             id='column'
             className='border border-gray-300 rounded-md p-2 w-full outline-orange-500 my-2'
             onChange={() => {
-              selectedTodo.parentId = Number(
+              selectedTodo.parentId = 
                 (document.getElementById('column') as HTMLSelectElement).value
-              );
             }}
           >
             <option defaultValue={selectedTodo._id}>
@@ -107,7 +100,7 @@ const FullToDo = () => {
           <button
             className='bg-red-500 py-2 px-3 text-white font-semibold rounded-lg'
             onClick={() => {
-              deleteTask(selectedTodo.parentId, selectedTodo._id),
+              useTaskStore.getState().deleteTask(selectedTodo.parentId, selectedTodo._id)
                 setViewTodo(false);
             }}
           >
@@ -120,6 +113,7 @@ const FullToDo = () => {
             Update
           </button>
         </div>
+      </div>
       </div>
     </div>
   );

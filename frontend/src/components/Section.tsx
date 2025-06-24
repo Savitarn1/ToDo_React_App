@@ -2,8 +2,8 @@ import { useTaskStore } from "../store/useTaskStore";
 
 interface SectionProps {
   children?: React.ReactNode;
-  parentId: number;
-  childId: number;
+  parentId: string;
+  childId: string;
   maxValue:number
 }
 const Section = ({children , parentId , childId , maxValue}:SectionProps) => {

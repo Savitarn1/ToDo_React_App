@@ -6,7 +6,7 @@ class TodoController {
       const data = await ToDo.find({});
       res
         .status(200)
-        .json({ success: true, message: 'Get successfully', data });
+        .json({ success: true, message: 'Get successfully', data },{new:true});
     } catch (error) {
       console.log(error);
       res
@@ -51,9 +51,9 @@ class TodoController {
 
   async updatetodos(req, res) {
     const { id } = req.params;
-    const { title } = req.body;
+    const body = req.body;
     try {
-      const data = await ToDo.findByIdAndUpdate(id, { title });
+      const data = await ToDo.findByIdAndUpdate(id, body);
       res
         .status(200)
         .json({ success: true, message: 'Update successfully', data });

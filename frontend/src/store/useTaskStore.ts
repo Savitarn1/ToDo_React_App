@@ -27,7 +27,7 @@ interface TaskStoreProps {
   setSelectedTodo: (parentId: string, childId: string, maxValue:number) => void;
   setViewTodo: (view: boolean) => void;
   deleteTask: (parentId: string, childId: string) => void;
-  updateTask: (parentId: string, childId: string, updatedTask: Todo, originalData: Todo) => void;
+  updateTask: (parentId: string, childId: string, updatedTask: Todo) => void;
   changeTitle : (id:string,title:string) => void
 }
 

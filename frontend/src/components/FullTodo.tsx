@@ -12,7 +12,7 @@ const FullToDo = () => {
   const handleUpdate = () => {
     const originalData = todos.find((todo) => todo._id === selectedTodo._id);
     if (originalData)
-      updateTask(selectedTodo.parentId, selectedTodo._id, selectedTodo, originalData);
+      updateTask(selectedTodo.parentId, selectedTodo._id, selectedTodo);
     setViewTodo(false);
   };
   return (
